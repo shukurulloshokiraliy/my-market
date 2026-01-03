@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from './components/Card';
-import { Product } from '../app/types/Api';
+import type { Product } from '../app/types/Api';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -56,7 +56,6 @@ export default function Home() {
     }
   ];
 
-  
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -79,7 +78,6 @@ export default function Home() {
     fetchProducts();
   }, []);
 
- 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -103,8 +101,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-      
-        <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[28rem] rounded-2xl overflow-hidden mb-6 group">
+        {/* Carousel Section */}
+        <div className="relative w-full h-64 sm:h-80 md:h-96 rounded-2xl overflow-hidden mb-6 group">
           {slides.map((slide, index) => (
             <div
               key={slide.id}
@@ -123,7 +121,8 @@ export default function Home() {
           <button
             onClick={prevSlide}
             className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 sm:p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
-            aria-label="Previous slide"
+            aria-label="Oldingi slayd"
+            title="Oldingi slayd"
           >
             <ChevronLeft size={24} className="text-gray-800" />
           </button>
@@ -131,7 +130,8 @@ export default function Home() {
           <button
             onClick={nextSlide}
             className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 sm:p-3 rounded-full shadow-lg transition-all opacity-0 group-hover:opacity-100"
-            aria-label="Next slide"
+            aria-label="Keyingi slayd"
+            title="Keyingi slayd"
           >
             <ChevronRight size={24} className="text-gray-800" />
           </button>
@@ -146,13 +146,14 @@ export default function Home() {
                     ? 'w-8 h-2 bg-white'
                     : 'w-2 h-2 bg-white/50 hover:bg-white/75'
                 } rounded-full`}
-                aria-label={`Go to slide ${index + 1}`}
+                aria-label={`${index + 1}-slaydga o'tish`}
+                title={`Slayd ${index + 1}`}
               />
             ))}
           </div>
         </div>
 
-      
+        {/* Categories Section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {categories.map((category) => (
             <div
@@ -173,7 +174,7 @@ export default function Home() {
           ))}
         </div>
 
- 
+        {/* Products Section */}
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Mashhur</h2>
           <div className="h-1 w-20 bg-purple-600 rounded mb-6"></div>
