@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingCart, Heart, User, Menu, MapPin, X } from 'lucide-react';
+import { Search, Menu, MapPin, X } from 'lucide-react';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -49,7 +49,7 @@ const Header = () => {
           </div>
         </div>
       </div>
-
+      
       <div className={`transition-all duration-300 ${
         isScrolled 
           ? 'fixed top-0 left-0 right-0 z-50 bg-white shadow-md' 

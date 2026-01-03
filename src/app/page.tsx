@@ -3,9 +3,12 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from './components/Card';
+import { Product } from '../app/types/Api';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const slides = [
     {
@@ -48,10 +51,42 @@ export default function Home() {
     },
     {
       id: 4,
-      image: '	https://static.uzum.uz/static/promo_images/334e3d52-1db3-4d86-b7b2-ebba5d4a5ccf',
+      image: 'https://static.uzum.uz/static/promo_images/334e3d52-1db3-4d86-b7b2-ebba5d4a5ccf',
       title: "Erkaklarga sovg'alar"
     }
   ];
+
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('https://dummyjson.com/products?limit=12');
+        
+        if (!response.ok) {
+          throw new Error('Ma\'lumot yuklashda xatolik');
+        }
+        
+        const data = await response.json();
+        setProducts(data.products);
+      } catch (err) {
+        console.error('Error fetching products:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchProducts();
+  }, []);
+
+ 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [currentSlide, slides.length]);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % slides.length);
@@ -65,18 +100,11 @@ export default function Home() {
     setCurrentSlide(index);
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [currentSlide]);
-
   return (
-    <div className="min-h-screen bg-gray-50 container">
+    <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6">
-        <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-112 rounded-2xl overflow-hidden mb-6 group">
+      
+        <div className="relative w-full h-64 sm:h-80 md:h-96 lg:h-[28rem] rounded-2xl overflow-hidden mb-6 group">
           {slides.map((slide, index) => (
             <div
               key={slide.id}
@@ -124,7 +152,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {categories.map((category) => (
             <div
               key={category.id}
@@ -143,8 +172,25 @@ export default function Home() {
             </div>
           ))}
         </div>
+
+ 
+        <div className="mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Mashhur</h2>
+          <div className="h-1 w-20 bg-purple-600 rounded mb-6"></div>
+        </div>
+
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-purple-600"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {products.map((product) => (
+              <Card key={product.id} product={product} />
+            ))}
+          </div>
+        )}
       </div>
-      <Card/>
     </div>
   );
 }
