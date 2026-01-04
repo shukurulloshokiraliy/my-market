@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Card from './components/Card';
-import type { Product } from '../app/types/Api';
+import type { Product } from './types/Api';
 
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
