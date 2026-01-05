@@ -21,7 +21,7 @@ const Like = () => {
   useEffect(() => {
     loadLikedProducts();
 
-    // Listen for changes to liked products
+
     const handleLikedChange = () => {
       loadLikedProducts();
     };
