@@ -56,7 +56,7 @@ const Like = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
-        {/* Header */}
+      
         <div className="flex items-center gap-4 mb-6">
           <Link 
             href="/"
@@ -75,9 +75,8 @@ const Like = () => {
           </div>
         </div>
 
-        {/* Content */}
         {likedProducts.length === 0 ? (
-          // Empty State
+        
           <div className="bg-white rounded-2xl p-8 sm:p-12 text-center">
             <div className="max-w-md mx-auto">
               <div className="w-24 h-24 mx-auto mb-6 bg-purple-50 rounded-full flex items-center justify-center">
@@ -98,9 +97,9 @@ const Like = () => {
             </div>
           </div>
         ) : (
-          // Products Grid
+     
           <div>
-            {/* Stats Bar */}
+           
             <div className="bg-white rounded-lg p-4 mb-6 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Heart className="text-purple-600" size={20} />
@@ -116,11 +115,11 @@ const Like = () => {
               </button>
             </div>
 
-            {/* Products Grid */}
+          
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {likedProducts.map((product) => (
                 <div key={product.id} className="relative">
-                  {/* Remove Button */}
+               
                   <button
                     onClick={() => handleRemoveProduct(product.id)}
                     className="absolute top-2 right-2 z-20 bg-white hover:bg-red-50 p-2 rounded-full shadow-lg transition-all"
@@ -130,13 +129,13 @@ const Like = () => {
                     <Heart className="w-5 h-5 fill-purple-500 text-purple-500" />
                   </button>
                   
-                  {/* Product Card */}
+             
                   <Card product={product} />
                 </div>
               ))}
             </div>
 
-            {/* Bottom Action Bar */}
+         
             <div className="mt-8 bg-white rounded-lg p-6">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div className="text-center sm:text-left">

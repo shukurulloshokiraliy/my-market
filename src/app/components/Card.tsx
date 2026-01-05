@@ -4,7 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart, Star } from 'lucide-react';
 import type { Product } from '../types/Api';
-import { toggleLiked, isProductLiked } from '@/app/utils/likeStorage';
+import { toggleLiked, isProductLiked } from '../utils/likeStorage';
+import { addToCart, getProductQuantity, updateQuantity } from '../utils/cartStorage';
 
 interface CardProps {
   product: Product;
@@ -13,14 +14,25 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ product }) => {
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [quantity, setQuantity] = useState(0);
   
   // Check if product is already liked on mount
   useEffect(() => {
     setIsFavorite(isProductLiked(product.id));
+    setQuantity(getProductQuantity(product.id));
+  }, [product.id]);
+
+  // Listen for cart changes
+  useEffect(() => {
+    const handleCartChange = () => {
+      setQuantity(getProductQuantity(product.id));
+    };
+
+    window.addEventListener('cartChanged', handleCartChange);
+    return () => window.removeEventListener('cartChanged', handleCartChange);
   }, [product.id]);
   
   const originalPrice = product.price / (1 - product.discountPercentage / 100);
-
   
   const formatPrice = (price: number): string => {
     return Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -37,7 +49,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
     return null;
   };
   
-
+  const badge = getBadge();
 
   // Navigate to detail page
   const handleCardClick = () => {
@@ -47,16 +59,30 @@ const Card: React.FC<CardProps> = ({ product }) => {
   // Toggle favorite with localStorage
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    
-    // Toggle in localStorage
     const newLikedState = toggleLiked(product);
     setIsFavorite(newLikedState);
   };
 
-  // Prevent navigation when clicking add to cart
+  // Add to cart
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
-    console.log('Savatga qo\'shildi:', product.title);
+    addToCart(product, 1);
+  };
+
+  // Increase quantity
+  const handleIncrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (quantity < product.stock) {
+      updateQuantity(product.id, quantity + 1);
+    }
+  };
+
+  // Decrease quantity
+  const handleDecrease = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (quantity > 0) {
+      updateQuantity(product.id, quantity - 1);
+    }
   };
   
   return (
@@ -95,7 +121,6 @@ const Card: React.FC<CardProps> = ({ product }) => {
           <div className="text-gray-400 line-through text-sm">
             {formatPrice(originalPrice)} so'm
           </div>
-        
         </div>
     
         <h3 className="text-sm text-gray-700 mb-2 line-clamp-2 flex-1">
@@ -107,16 +132,39 @@ const Card: React.FC<CardProps> = ({ product }) => {
           <span className="font-semibold text-sm">{product.rating.toFixed(1)}</span>
         </div>
         
-        <button 
-          onClick={handleAddToCart}
-          className="w-full h-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-xl transition-colors duration-200 flex items-center justify-center gap-3"
-          title="Savatga qo'shish"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-          Ertaga
-        </button>
+        {quantity === 0 ? (
+          <button 
+            onClick={handleAddToCart}
+            className="w-full h-10 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-xl transition-colors duration-200 flex items-center justify-center gap-3"
+            title="Savatga qo'shish"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+            </svg>
+            Ertaga
+          </button>
+        ) : (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleDecrease}
+              className="flex-shrink-0 w-10 h-10 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg flex items-center justify-center font-bold transition-colors"
+              title="Kamaytirish"
+            >
+              -
+            </button>
+            <div className="flex-1 h-10 bg-purple-600 text-white rounded-lg flex items-center justify-center font-semibold">
+              {quantity}
+            </div>
+            <button
+              onClick={handleIncrease}
+              disabled={quantity >= product.stock}
+              className="flex-shrink-0 w-10 h-10 bg-purple-100 hover:bg-purple-200 text-purple-600 rounded-lg flex items-center justify-center font-bold transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              title="Oshirish"
+            >
+              +
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

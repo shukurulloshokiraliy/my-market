@@ -153,7 +153,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Categories Section */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-8">
           {categories.map((category) => (
             <div
@@ -174,7 +173,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* Products Section */}
+
         <div className="mb-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Mashhur</h2>
           <div className="h-1 w-20 bg-purple-600 rounded mb-6"></div>
