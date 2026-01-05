@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart, Star } from 'lucide-react';
 import type { Product } from '../types/Api';
+import { toggleLiked, isProductLiked } from '@/app/utils/likeStorage';
 
 interface CardProps {
   product: Product;
@@ -13,8 +14,13 @@ const Card: React.FC<CardProps> = ({ product }) => {
   const router = useRouter();
   const [isFavorite, setIsFavorite] = useState(false);
   
+  // Check if product is already liked on mount
+  useEffect(() => {
+    setIsFavorite(isProductLiked(product.id));
+  }, [product.id]);
+  
   const originalPrice = product.price / (1 - product.discountPercentage / 100);
-  const monthlyPayment = Math.floor(product.price / 12);
+
   
   const formatPrice = (price: number): string => {
     return Math.floor(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
@@ -31,17 +37,20 @@ const Card: React.FC<CardProps> = ({ product }) => {
     return null;
   };
   
-  const badge = getBadge();
+
 
   // Navigate to detail page
   const handleCardClick = () => {
     router.push(`/product/${product.id}`);
   };
 
-  // Prevent navigation when clicking favorite
+  // Toggle favorite with localStorage
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsFavorite(!isFavorite);
+    
+    // Toggle in localStorage
+    const newLikedState = toggleLiked(product);
+    setIsFavorite(newLikedState);
   };
 
   // Prevent navigation when clicking add to cart
@@ -53,7 +62,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
   return (
     <div 
       onClick={handleCardClick}
-      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-130 cursor-pointer"
+      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-120 cursor-pointer"
     >
       <div className="relative p-6 h-64">
         <button 
@@ -86,9 +95,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
           <div className="text-gray-400 line-through text-sm">
             {formatPrice(originalPrice)} so'm
           </div>
-          <div className="bg-yellow-300 text-purple-900 inline-block px-2 py-1 rounded text-xs font-semibold mt-1">
-            {monthlyPayment.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')} so'm/oyiga
-          </div>
+        
         </div>
     
         <h3 className="text-sm text-gray-700 mb-2 line-clamp-2 flex-1">
