@@ -8,8 +8,7 @@ import {
   getCartItems, 
   updateQuantity, 
   removeFromCart, 
-  clearCart,
-
+  clearCart
 } from '../utils/cartStorage';
 
 const Cart = () => {
@@ -20,7 +19,6 @@ const Cart = () => {
   const loadCart = () => {
     const items = getCartItems();
     setCartItems(items);
-    // Auto-select all items
     setSelectedItems(new Set(items.map(item => item.id)));
     setLoading(false);
   };
@@ -171,6 +169,7 @@ const Cart = () => {
                   checked={selectedItems.size === cartItems.length && cartItems.length > 0}
                   onChange={handleSelectAll}
                   className="w-5 h-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                  aria-label="Hammasini tanlash"
                 />
                 <span className="font-medium text-gray-700">Hammasini tanlash</span>
               </label>
@@ -181,17 +180,18 @@ const Cart = () => {
               <div key={item.id} className="bg-white rounded-lg p-4 sm:p-6">
                 <div className="flex gap-4">
                   {/* Checkbox */}
-                  <div className="flex-shrink-0 pt-1">
+                  <div className="shrink-0 pt-1">
                     <input
                       type="checkbox"
                       checked={selectedItems.has(item.id)}
                       onChange={() => handleSelectItem(item.id)}
                       className="w-5 h-5 rounded border-gray-300 text-purple-600 focus:ring-purple-500"
+                      aria-label={`${item.title} tanlash`}
                     />
                   </div>
 
                   {/* Image */}
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <Link href={`/product/${item.id}`}>
                       <img
                         src={item.thumbnail}
@@ -218,18 +218,18 @@ const Cart = () => {
                         <button
                           onClick={() => handleDecrease(item)}
                           className="p-2 hover:bg-gray-100 transition-colors"
-                          aria-label="Kamaytirish"
+                          aria-label="Miqdorni kamaytirish"
                         >
                           <Minus size={16} />
                         </button>
-                        <span className="px-4 py-2 min-w-[40px] text-center font-medium">
+                        <span className="px-4 py-2 min-w-10 text-center font-medium">
                           {item.quantity}
                         </span>
                         <button
                           onClick={() => handleIncrease(item)}
                           disabled={item.quantity >= item.stock}
                           className="p-2 hover:bg-gray-100 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                          aria-label="Oshirish"
+                          aria-label="Miqdorni oshirish"
                         >
                           <Plus size={16} />
                         </button>
@@ -238,7 +238,7 @@ const Cart = () => {
                       <button
                         onClick={() => handleRemove(item.id)}
                         className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                        aria-label="O'chirish"
+                        aria-label={`${item.title} o'chirish`}
                       >
                         <Trash2 size={18} />
                       </button>
@@ -286,6 +286,7 @@ const Cart = () => {
               <button
                 disabled={selectedItems.size === 0}
                 className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-label="Rasmiylashtirish"
               >
                 Rasmiylashtrishga o'tish
               </button>
@@ -297,6 +298,7 @@ const Cart = () => {
                   }
                 }}
                 className="w-full mt-3 text-red-600 hover:text-red-700 font-medium py-2 transition-colors"
+                aria-label="Savatni tozalash"
               >
                 Savatni tozalash
               </button>

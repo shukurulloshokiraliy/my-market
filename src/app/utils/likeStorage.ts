@@ -5,6 +5,7 @@ export const LIKED_PRODUCTS_KEY = 'uzum_liked_products';
 export interface LikedProduct {
   id: number;
   title: string;
+  description: string;
   price: number;
   discountPercentage: number;
   rating: number;
