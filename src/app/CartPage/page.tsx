@@ -144,7 +144,7 @@ const Cart = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-6 sm:py-8">
-        {/* Header */}
+
         <div className="flex items-center gap-4 mb-6">
           <Link 
             href="/"
@@ -159,9 +159,9 @@ const Cart = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Left: Cart Items */}
+        
           <div className="lg:col-span-2 space-y-4">
-            {/* Select All */}
+         
             <div className="bg-white rounded-lg p-4">
               <label className="flex items-center gap-3 cursor-pointer">
                 <input
@@ -175,11 +175,10 @@ const Cart = () => {
               </label>
             </div>
 
-            {/* Cart Items */}
             {cartItems.map((item) => (
               <div key={item.id} className="bg-white rounded-lg p-4 sm:p-6">
                 <div className="flex gap-4">
-                  {/* Checkbox */}
+                
                   <div className="shrink-0 pt-1">
                     <input
                       type="checkbox"
@@ -190,7 +189,7 @@ const Cart = () => {
                     />
                   </div>
 
-                  {/* Image */}
+               
                   <div className="shrink-0">
                     <Link href={`/product/${item.id}`}>
                       <img
@@ -201,7 +200,7 @@ const Cart = () => {
                     </Link>
                   </div>
 
-                  {/* Details */}
+            
                   <div className="flex-1 min-w-0">
                     <Link href={`/product/${item.id}`}>
                       <h3 className="text-sm sm:text-base font-medium text-gray-800 hover:text-purple-600 line-clamp-2 mb-2">
@@ -212,7 +211,7 @@ const Cart = () => {
                       Sotuvchi: {item.brand}
                     </p>
                     
-                    {/* Quantity Controls */}
+                
                     <div className="flex items-center gap-4 mb-3">
                       <div className="flex items-center border border-gray-300 rounded-lg">
                         <button
@@ -244,7 +243,6 @@ const Cart = () => {
                       </button>
                     </div>
 
-                    {/* Price */}
                     <div className="flex items-baseline gap-2">
                       <span className="text-lg sm:text-xl font-bold text-purple-600">
                         {formatPrice(item.price * item.quantity)} so'm
@@ -261,7 +259,6 @@ const Cart = () => {
             ))}
           </div>
 
-          {/* Right: Order Summary */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg p-6 sticky top-6">
               <h2 className="text-xl font-bold text-gray-800 mb-4">Buyurtmangiz</h2>

@@ -16,13 +16,13 @@ const Card: React.FC<CardProps> = ({ product }) => {
   const [isFavorite, setIsFavorite] = useState(false);
   const [quantity, setQuantity] = useState(0);
   
-  // Check if product is already liked on mount
+
   useEffect(() => {
     setIsFavorite(isProductLiked(product.id));
     setQuantity(getProductQuantity(product.id));
   }, [product.id]);
 
-  // Listen for cart changes
+
   useEffect(() => {
     const handleCartChange = () => {
       setQuantity(getProductQuantity(product.id));
@@ -51,25 +51,24 @@ const Card: React.FC<CardProps> = ({ product }) => {
   
   const badge = getBadge();
 
-  // Navigate to detail page
+ 
   const handleCardClick = () => {
     router.push(`/product/${product.id}`);
   };
 
-  // Toggle favorite with localStorage
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     const newLikedState = toggleLiked(product);
     setIsFavorite(newLikedState);
   };
 
-  // Add to cart
+
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();
     addToCart(product, 1);
   };
 
-  // Increase quantity
+
   const handleIncrease = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (quantity < product.stock) {
@@ -77,7 +76,7 @@ const Card: React.FC<CardProps> = ({ product }) => {
     }
   };
 
-  // Decrease quantity
+
   const handleDecrease = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (quantity > 0) {

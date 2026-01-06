@@ -27,12 +27,11 @@ const Header = () => {
     }
   }, [isMobileMenuOpen]);
 
-  // Load liked count on mount and listen for changes
+
   useEffect(() => {
-    // Initial load
+ 
     setLikedCount(getLikedCount());
 
-    // Listen for changes
     const handleLikedChange = () => {
       setLikedCount(getLikedCount());
     };
